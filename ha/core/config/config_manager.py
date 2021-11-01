@@ -22,6 +22,7 @@
  ****************************************************************************
 """
 
+import os
 from cortx.utils.log import Log
 from cortx.utils.conf_store.conf_store import Conf
 
@@ -69,7 +70,8 @@ class ConfigManager:
         Used by config manager methods to check and initalize confstore if needed.
         """
         if ConfigManager._cluster_confstore is None:
-            ConfigManager._cluster_confstore = ConsulKvStore(prefix=const.CLUSTER_CONFSTORE_PREFIX)
+            host = os.environ.get('CONSUL_HOSTNAME') or 'localhost'
+            ConfigManager._cluster_confstore = ConsulKvStore(host=host, prefix=const.CLUSTER_CONFSTORE_PREFIX)
         return ConfigManager._cluster_confstore
 
     @staticmethod
